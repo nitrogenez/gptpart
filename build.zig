@@ -21,3 +21,5 @@ pub fn build(b: *std.Build) void {
 
     test_step.dependOn(&test_run.step);
 }
+
+pub const PartitionStep = @import("src/build/PartitionStep.zig");
