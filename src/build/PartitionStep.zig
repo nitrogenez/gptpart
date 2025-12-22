@@ -29,7 +29,7 @@ pub fn create(b: *std.Build, size: usize, sector_size: usize, basename: []const 
         }),
         .output = .{ .step = &self.step },
         .basename = basename,
-        .disk = .init(size, sector_size) catch @panic("Disk creation error"),
+        .disk = root.Disk.init(size, sector_size) catch @panic("Disk creation error"),
         .table = .empty,
     };
 }
