@@ -62,19 +62,22 @@ pub fn make(step: *std.Build.Step, _: std.Build.Step.MakeOptions) !void {
         man.hash.add(item.attr);
     }
     man.hash.add(self.table.inner.items.len);
+
+    // We got a hit, don't do anything.
+    if (try step.cacheHit(&man)) {
+        const digest = man.final();
+        const cache_path = "o" ++ std.fs.path.sep_str ++ digest;
+        self.output.path = try b.cache_root.join(b.allocator, &.{ cache_path, self.basename });
+        return;
+    }
+    if (self.table.inner.items.len == 0)
+        return step.fail("Nothing left to do, the table length is 0", .{});
+
     const digest = man.final();
     const cache_path = "o" ++ std.fs.path.sep_str ++ digest;
     const full_path = try b.cache_root.join(b.allocator, &.{ cache_path, self.basename });
 
     errdefer b.allocator.free(full_path);
-
-    // We got a hit, don't do anything.
-    if (try step.cacheHit(&man)) {
-        self.output.path = full_path;
-        return;
-    }
-    if (self.table.inner.items.len == 0)
-        return step.fail("Nothing left to do, the table length is 0", .{});
 
     // Create an empty file and truncate it to the requested size.
     const file = try std.fs.createFileAbsolute(full_path, .{ .truncate = true });
