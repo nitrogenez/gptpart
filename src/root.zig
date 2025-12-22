@@ -1,7 +1,6 @@
 // Copyright (c) 2025 nitrogenez. All Rights Reserved.
 
 const std = @import("std");
-const gpt = @import("gpt.zig");
 
 test {
     _ = gpt;
@@ -11,6 +10,8 @@ const assert = std.debug.assert;
 const print = std.debug.print;
 
 pub const types = @import("types.zig");
+pub const gpt = @import("gpt.zig");
+pub const mbr = @import("mbr.zig");
 
 pub const gpt_pmbr_lba = 0;
 pub const gpt_header_lba = 1;
