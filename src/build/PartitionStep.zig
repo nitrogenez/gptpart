@@ -29,13 +29,13 @@ pub fn create(b: *std.Build, size: usize, sector_size: usize, basename: []const 
         }),
         .output = .{ .step = &self.step },
         .basename = basename,
-        .disk = .init(size, sector_size),
+        .disk = .init(size, sector_size) catch @panic("Disk creation error"),
         .table = .empty,
     };
 }
 
 pub fn addPart(self: *@This(), part: root.Partition) !void {
-    try self.table.append(self.step.owner.allocator, self.disk, part);
+    _ = try self.table.append(self.step.owner.allocator, self.disk, part);
 }
 
 pub fn getOutput(self: *const @This()) std.Build.LazyPath {
