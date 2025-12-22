@@ -32,6 +32,7 @@ pub fn create(b: *std.Build, size: usize, sector_size: usize, basename: []const 
         .disk = root.Disk.init(size, sector_size) catch @panic("Disk creation error"),
         .table = .empty,
     };
+    return self;
 }
 
 pub fn addPart(self: *@This(), part: root.Partition) !void {
